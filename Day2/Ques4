@@ -1,0 +1,21 @@
+#include <stdio.h>
+
+int maxProfitBruteForce(int prices[], int n) {
+    int maxProfit = 0;
+    for (int i = 0; i < n; i++) {
+        for (int j = i + 1; j < n; j++) {
+            int profit = prices[j] - prices[i];
+            if (profit > maxProfit) {
+                maxProfit = profit;
+            }
+        }
+    }
+    return maxProfit;
+}
+
+int main() {
+    int prices[] = {7, 1, 5, 3, 6, 4};
+    int n = sizeof(prices) / sizeof(prices[0]);
+    printf("Max Profit: %d\n", maxProfitBruteForce(prices, n));
+    return 0;
+}
