@@ -1,0 +1,31 @@
+#include <stdio.h>
+
+void moveZeroes(int nums[], int n) {
+    int i = 0; // position for next non-zero
+    for (int j = 0; j < n; j++) {
+        if (nums[j] != 0) {
+            nums[i] = nums[j];
+            i++;
+        }
+    }
+    // fill remaining with zeroes
+    while (i < n) {
+        nums[i] = 0;
+        i++;
+    }
+}
+
+int main() {
+    int nums[] = {0, 1, 0, 3, 12};
+    int n = sizeof(nums) / sizeof(nums[0]);
+
+    moveZeroes(nums, n);
+
+    printf("Array after moving zeroes: ");
+    for (int k = 0; k < n; k++) {
+        printf("%d ", nums[k]);
+    }
+    printf("\n");
+
+    return 0;
+}
