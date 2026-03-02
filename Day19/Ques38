@@ -1,0 +1,59 @@
+#include <stdio.h>
+#include <limits.h>
+
+// Standard Kadane's algorithm to find max subarray sum
+int kadaneMax(int arr[], int n) {
+    int maxEndingHere = arr[0], maxSoFar = arr[0];
+    for (int i = 1; i < n; i++) {
+        maxEndingHere = (arr[i] > maxEndingHere + arr[i]) ? arr[i] : maxEndingHere + arr[i];
+        if (maxEndingHere > maxSoFar)
+            maxSoFar = maxEndingHere;
+    }
+    return maxSoFar;
+}
+
+// Kadane’s algorithm to find min subarray sum
+int kadaneMin(int arr[], int n) {
+    int minEndingHere = arr[0], minSoFar = arr[0];
+    for (int i = 1; i < n; i++) {
+        minEndingHere = (arr[i] < minEndingHere + arr[i]) ? arr[i] : minEndingHere + arr[i];
+        if (minEndingHere < minSoFar)
+            minSoFar = minEndingHere;
+    }
+    return minSoFar;
+}
+
+int maxCircularSubarraySum(int arr[], int n) {
+    int maxNormal = kadaneMax(arr, n);
+
+    // If all numbers are negative, return maxNormal
+    if (maxNormal < 0) return maxNormal;
+
+    int totalSum = 0;
+    for (int i = 0; i < n; i++) {
+        totalSum += arr[i];
+    }
+
+    int minSubarray = kadaneMin(arr, n);
+    int maxCircular = totalSum - minSubarray;
+
+    return (maxNormal > maxCircular) ? maxNormal : maxCircular;
+}
+
+int main() {
+    int n;
+    int arr[100];
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements:\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int result = maxCircularSubarraySum(arr, n);
+    printf("Maximum circular subarray sum = %d\n", result);
+
+    return 0;
+}
