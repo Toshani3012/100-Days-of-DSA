@@ -1,0 +1,90 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Structure for hash map node
+typedef struct Node {
+    int key;
+    int value;
+    struct Node* next;
+} Node;
+
+#define TABLE_SIZE 1000
+
+Node* hashTable[TABLE_SIZE];
+
+// Simple hash function
+int hash(int key) {
+    return (key % TABLE_SIZE + TABLE_SIZE) % TABLE_SIZE;
+}
+
+// Insert or update key in hash table
+void insert(int key) {
+    int h = hash(key);
+    Node* temp = hashTable[h];
+    while (temp != NULL) {
+        if (temp->key == key) {
+            temp->value++;
+            return;
+        }
+        temp = temp->next;
+    }
+    Node* newNode = (Node*)malloc(sizeof(Node));
+    newNode->key = key;
+    newNode->value = 1;
+    newNode->next = hashTable[h];
+    hashTable[h] = newNode;
+}
+
+// Get frequency of a key
+int get(int key) {
+    int h = hash(key);
+    Node* temp = hashTable[h];
+    while (temp != NULL) {
+        if (temp->key == key) return temp->value;
+        temp = temp->next;
+    }
+    return 0;
+}
+
+int countZeroSumSubarrays(int arr[], int n) {
+    int prefixSum = 0;
+    int count = 0;
+
+    // Initialize hash table
+    for (int i = 0; i < TABLE_SIZE; i++) {
+        hashTable[i] = NULL;
+    }
+
+    // Insert prefix sum 0 initially
+    insert(0);
+
+    for (int i = 0; i < n; i++) {
+        prefixSum += arr[i];
+
+        // If prefixSum has been seen before, add its frequency to count
+        count += get(prefixSum);
+
+        // Insert/update prefixSum in hash table
+        insert(prefixSum);
+    }
+
+    return count;
+}
+
+int main() {
+    int n;
+    int arr[100];
+
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    printf("Enter %d elements:\n", n);
+    for (int i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    int result = countZeroSumSubarrays(arr, n);
+    printf("Count of subarrays with sum zero = %d\n", result);
+
+    return 0;
+}
