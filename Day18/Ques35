@@ -1,0 +1,50 @@
+#include <stdio.h>
+
+void rotateArray(int arr[], int n, int k) {
+    int temp[n];
+    int i;
+
+    // Normalize k (in case k > n)
+    k = k % n;
+
+    // Copy elements to temp with rotation
+    for(i = 0; i < n; i++) {
+        temp[(i + k) % n] = arr[i];
+    }
+
+    // Copy back to original array
+    for(i = 0; i < n; i++) {
+        arr[i] = temp[i];
+    }
+}
+
+int main() {
+    int n, k, i;
+    int arr[100];
+
+    // Input size of array
+    printf("Enter number of elements: ");
+    scanf("%d", &n);
+
+    // Input array elements
+    printf("Enter %d elements:\n", n);
+    for(i = 0; i < n; i++) {
+        scanf("%d", &arr[i]);
+    }
+
+    // Input rotation count
+    printf("Enter number of positions to rotate: ");
+    scanf("%d", &k);
+
+    // Rotate array
+    rotateArray(arr, n, k);
+
+    // Output rotated array
+    printf("Array after rotating by %d positions:\n", k);
+    for(i = 0; i < n; i++) {
+        printf("%d ", arr[i]);
+    }
+    printf("\n");
+
+    return 0;
+}
