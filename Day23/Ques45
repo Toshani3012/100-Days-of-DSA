@@ -1,0 +1,76 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to create a new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to print the linked list
+void traverseList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp != NULL) {
+        printf("%d -> ", temp->data);
+        temp = temp->next;
+    }
+    printf("NULL\n");
+}
+
+// Function to merge two sorted linked lists
+struct Node* mergeLists(struct Node* l1, struct Node* l2) {
+    // Dummy node to simplify handling
+    struct Node dummy;
+    struct Node* tail = &dummy;
+    dummy.next = NULL;
+
+    while (l1 != NULL && l2 != NULL) {
+        if (l1->data <= l2->data) {
+            tail->next = l1;
+            l1 = l1->next;
+        } else {
+            tail->next = l2;
+            l2 = l2->next;
+        }
+        tail = tail->next;
+    }
+
+    // Attach remaining nodes
+    if (l1 != NULL) tail->next = l1;
+    else tail->next = l2;
+
+    return dummy.next;
+}
+
+int main() {
+    // First sorted list: 10 -> 20 -> 30
+    struct Node* l1 = createNode(10);
+    l1->next = createNode(20);
+    l1->next->next = createNode(30);
+
+    // Second sorted list: 15 -> 25 -> 35
+    struct Node* l2 = createNode(15);
+    l2->next = createNode(25);
+    l2->next->next = createNode(35);
+
+    printf("List 1: ");
+    traverseList(l1);
+    printf("List 2: ");
+    traverseList(l2);
+
+    // Merge
+    struct Node* merged = mergeLists(l1, l2);
+
+    printf("Merged Sorted List: ");
+    traverseList(merged);
+
+    return 0;
+}
