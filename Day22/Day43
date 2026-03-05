@@ -1,0 +1,41 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+// Define the structure for a node
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Function to create a new node
+struct Node* createNode(int value) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = value;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to count nodes in the linked list
+int countNodes(struct Node* head) {
+    int count = 0;
+    struct Node* temp = head;
+    while (temp != NULL) {
+        count++;
+        temp = temp->next;
+    }
+    return count;
+}
+
+int main() {
+    // Create nodes
+    struct Node* head = createNode(10);
+    head->next = createNode(20);
+    head->next->next = createNode(30);
+    head->next->next->next = createNode(40);
+
+    // Count nodes
+    int totalNodes = countNodes(head);
+    printf("Total number of nodes: %d\n", totalNodes);
+
+    return 0;
+}
