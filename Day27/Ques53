@@ -1,0 +1,53 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+// Utility to create a new node
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+// Function to find intersection point
+struct Node* getIntersectionNode(struct Node* head1, struct Node* head2) {
+    if (!head1 || !head2) return NULL;
+
+    struct Node* p1 = head1;
+    struct Node* p2 = head2;
+
+    while (p1 != p2) {
+        p1 = (p1 == NULL) ? head2 : p1->next;
+        p2 = (p2 == NULL) ? head1 : p2->next;
+    }
+    return p1; // Either intersection node or NULL
+}
+
+int main() {
+    // Example setup
+    struct Node* common = createNode(15);
+    common->next = createNode(30);
+
+    // First list: 10 -> 20 -> 15 -> 30
+    struct Node* head1 = createNode(10);
+    head1->next = createNode(20);
+    head1->next->next = common;
+
+    // Second list: 5 -> 15 -> 30
+    struct Node* head2 = createNode(5);
+    head2->next = common;
+
+    struct Node* intersection = getIntersectionNode(head1, head2);
+    if (intersection) {
+        printf("Intersection at node with data = %d\n", intersection->data);
+    } else {
+        printf("No intersection\n");
+    }
+
+    return 0;
+}
