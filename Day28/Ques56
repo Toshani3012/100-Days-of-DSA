@@ -1,0 +1,96 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+// Reverse a linked list
+struct Node* reverseList(struct Node* head) {
+    struct Node* prev = NULL;
+    struct Node* current = head;
+    struct Node* next = NULL;
+    while (current != NULL) {
+        next = current->next;
+        current->next = prev;
+        prev = current;
+        current = next;
+    }
+    return prev;
+}
+
+// Check palindrome
+bool isPalindrome(struct Node* head) {
+    if (!head || !head->next) return true;
+
+    // Find middle using slow/fast pointers
+    struct Node* slow = head;
+    struct Node* fast = head;
+    while (fast->next && fast->next->next) {
+        slow = slow->next;
+        fast = fast->next->next;
+    }
+
+    // Reverse second half
+    struct Node* secondHalf = reverseList(slow->next);
+
+    // Compare halves
+    struct Node* p1 = head;
+    struct Node* p2 = secondHalf;
+    bool palindrome = true;
+    while (p2 != NULL) {
+        if (p1->data != p2->data) {
+            palindrome = false;
+            break;
+        }
+        p1 = p1->next;
+        p2 = p2->next;
+    }
+
+    // Restore list (optional)
+    slow->next = reverseList(secondHalf);
+
+    return palindrome;
+}
+
+int main() {
+    int n;
+    scanf("%d", &n);
+
+    struct Node* head = NULL;
+    for (int i = 0; i < n; i++) {
+        int value;
+        scanf("%d", &value);
+        insertEnd(&head, value);
+    }
+
+    if (isPalindrome(head)) {
+        printf("Palindrome\n");
+    } else {
+        printf("Not Palindrome\n");
+    }
+
+    return 0;
+}
