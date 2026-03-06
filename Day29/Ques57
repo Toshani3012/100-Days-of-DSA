@@ -1,0 +1,84 @@
+#include <stdio.h>
+#include <stdlib.h>
+
+struct Node {
+    int data;
+    struct Node* next;
+};
+
+struct Node* createNode(int data) {
+    struct Node* newNode = (struct Node*)malloc(sizeof(struct Node));
+    newNode->data = data;
+    newNode->next = NULL;
+    return newNode;
+}
+
+void insertEnd(struct Node** head, int data) {
+    struct Node* newNode = createNode(data);
+    if (*head == NULL) {
+        *head = newNode;
+        return;
+    }
+    struct Node* temp = *head;
+    while (temp->next != NULL) {
+        temp = temp->next;
+    }
+    temp->next = newNode;
+}
+
+struct Node* rotateRight(struct Node* head, int k) {
+    if (!head || !head->next || k == 0) return head;
+
+    // Find length and tail
+    int length = 1;
+    struct Node* tail = head;
+    while (tail->next) {
+        tail = tail->next;
+        length++;
+    }
+
+    // Make it circular
+    tail->next = head;
+
+    // Find new tail position
+    k = k % length;
+    int stepsToNewTail = length - k - 1;
+    struct Node* newTail = head;
+    for (int i = 0; i < stepsToNewTail; i++) {
+        newTail = newTail->next;
+    }
+
+    // New head
+    struct Node* newHead = newTail->next;
+    newTail->next = NULL;
+
+    return newHead;
+}
+
+void printList(struct Node* head) {
+    struct Node* temp = head;
+    while (temp) {
+        printf("%d ", temp->data);
+        temp = temp->next;
+    }
+    printf("\n");
+}
+
+int main() {
+    int n, k;
+    scanf("%d", &n);
+
+    struct Node* head = NULL;
+    for (int i = 0; i < n; i++) {
+        int value;
+        scanf("%d", &value);
+        insertEnd(&head, value);
+    }
+
+    scanf("%d", &k);
+
+    head = rotateRight(head, k);
+    printList(head);
+
+    return 0;
+}
