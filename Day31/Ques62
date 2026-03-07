@@ -1,0 +1,54 @@
+#include <stdio.h>
+#include <string.h>
+#define MAX 100
+
+char stack[MAX];
+int top = -1;
+
+// Push function
+void push(char c) {
+    if (top == MAX - 1) {
+        printf("Stack Overflow\n");
+    } else {
+        stack[++top] = c;
+    }
+}
+
+// Pop function
+char pop() {
+    if (top == -1) {
+        return '\0'; // Empty stack
+    } else {
+        return stack[top--];
+    }
+}
+
+// Function to check if parentheses are valid
+int isValid(char *expr) {
+    for (int i = 0; i < strlen(expr); i++) {
+        char c = expr[i];
+        if (c == '(' || c == '{' || c == '[') {
+            push(c);
+        } else if (c == ')' || c == '}' || c == ']') {
+            char topChar = pop();
+            if ((c == ')' && topChar != '(') ||
+                (c == '}' && topChar != '{') ||
+                (c == ']' && topChar != '[')) {
+                return 0; // Mismatch found
+            }
+        }
+    }
+    return top == -1; // Valid if stack is empty
+}
+
+int main() {
+    char expr1[] = "{[()]}";
+    char expr2[] = "{[(])}";
+    char expr3[] = "((()))";
+
+    printf("%s -> %s\n", expr1, isValid(expr1) ? "Valid" : "Invalid");
+    printf("%s -> %s\n", expr2, isValid(expr2) ? "Valid" : "Invalid");
+    printf("%s -> %s\n", expr3, isValid(expr3) ? "Valid" : "Invalid");
+
+    return 0;
+}
