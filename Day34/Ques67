@@ -1,0 +1,44 @@
+#include <stdio.h>
+#include <ctype.h>   // for isdigit()
+#include <stdlib.h>  // for atoi()
+
+#define MAX 100
+
+int stack[MAX];
+int top = -1;
+
+void push(int x) {
+    stack[++top] = x;
+}
+
+int pop() {
+    return stack[top--];
+}
+
+int evaluatePostfix(char* exp) {
+    char *p = exp;
+    while (*p != '\0') {
+        if (isdigit(*p)) {
+            // Convert char digit to int
+            push(*p - '0');
+        } else {
+            int val2 = pop();
+            int val1 = pop();
+            switch (*p) {
+                case '+': push(val1 + val2); break;
+                case '-': push(val1 - val2); break;
+                case '*': push(val1 * val2); break;
+                case '/': push(val1 / val2); break;
+            }
+        }
+        p++;
+    }
+    return pop();
+}
+
+int main() {
+    char exp[] = "53+2*";  // Equivalent to (5+3)*2
+    printf("Postfix Expression: %s\n", exp);
+    printf("Evaluated Result: %d\n", evaluatePostfix(exp));
+    return 0;
+}
